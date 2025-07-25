@@ -1,15 +1,4 @@
-import type { PageInfo } from "../../hooks/usePagination";
-
-export interface PaginationProps {
-    pageInfo: PageInfo;
-    currentPage: number;
-    onPreviousPage: () => void;
-    onNextPage: () => void;
-    className?: string;
-    infoClassName?: string;
-    buttonsClassName?: string;
-    buttonClassName?: string;
-}
+import type { PaginationProps } from "../../types";
 
 export function Pagination({
     pageInfo,

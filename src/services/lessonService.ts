@@ -3,9 +3,11 @@ import type {
     Result,
     Lesson,
     LessonSummary,
+    Student,
     PageResponse,
     PaginationParams,
 } from "../types";
+import type { CreateLessonRequest } from "../types/lesson";
 
 export const lessonService = {
     async getLessons(
@@ -35,5 +37,13 @@ export const lessonService = {
         return api.get<PageResponse<LessonSummary>>(
             `/teachers/${teacherId}/lessons?${queryParams}`
         );
+    },
+
+    async createLesson(request: CreateLessonRequest): Promise<Result<Lesson>> {
+        return api.post<Lesson>("/lessons", request);
+    },
+
+    async getLessonStudents(lessonId: number): Promise<Result<PageResponse<Student>>> {
+        return api.get<PageResponse<Student>>(`/lessons/${lessonId}/students`);
     },
 };

@@ -1,16 +1,5 @@
 import { useState, useCallback } from "react";
-
-export interface LRUCacheConfig {
-    maxSize?: number;
-}
-
-export interface LRUCacheReturn<T> {
-    cachedPages: Map<number, T[]>;
-    cacheOrder: number[];
-    addToCache: (page: number, data: T[]) => void;
-    getCachedData: (page: number) => T[] | undefined;
-    updateCacheOrder: (page: number) => void;
-}
+import type { LRUCacheConfig, LRUCacheReturn } from "../types";
 
 export function useLRUCache<T>({
     maxSize = 10,

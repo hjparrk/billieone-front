@@ -2,21 +2,8 @@ import {
     useReactTable,
     getCoreRowModel,
     flexRender,
-    type ColumnDef,
 } from "@tanstack/react-table";
-
-export interface DataTableProps<T> {
-    data: T[];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    columns: ColumnDef<T, any>[];
-    emptyMessage?: string;
-    emptyDescription?: string;
-    containerClassName?: string;
-    tableClassName?: string;
-    headerClassName?: string;
-    cellClassName?: string;
-    emptyClassName?: string;
-}
+import type { DataTableProps } from "../../types";
 
 export function DataTable<T>({
     data,

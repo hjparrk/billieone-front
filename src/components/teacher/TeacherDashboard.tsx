@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { lessonService } from "../../services/lessonService";
@@ -5,47 +6,21 @@ import { useDataFetching } from "../../hooks/useDataFetching";
 import { usePagination } from "../../hooks/usePagination";
 import { DataTable } from "../common/DataTable";
 import { Pagination } from "../common/Pagination";
+import { CreateLessonModal } from "../lesson/CreateLessonModal";
+import { EditEnrollmentModal } from "../lesson/EditEnrollmentModal";
 import type { LessonSummary } from "../../types";
 import styles from "../../styles/components/teacher/TeacherDashboard.module.css";
 
 const columnHelper = createColumnHelper<LessonSummary>();
 
-const columns = [
-    columnHelper.accessor("title", {
-        header: "Title",
-        cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("schedule.days", {
-        header: "Days",
-        cell: (info) => info.getValue().join(", "),
-    }),
-    columnHelper.accessor("schedule.time", {
-        header: "Time",
-        cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("schedule.room", {
-        header: "Room",
-        cell: (info) => info.getValue(),
-    }),
-    columnHelper.display({
-        id: "actions",
-        header: "",
-        cell: () => (
-            <button
-                className={styles.editButton}
-                onClick={() => {
-                    // TODO: Implement edit functionality
-                    console.log("Edit lesson clicked");
-                }}
-            >
-                Edit
-            </button>
-        ),
-    }),
-];
-
 export function TeacherDashboard() {
     const { teacherId } = useParams<{ teacherId: string }>();
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isEditEnrollmentModalOpen, setIsEditEnrollmentModalOpen] =
+        useState(false);
+    const [selectedLessonId, setSelectedLessonId] = useState<number | null>(
+        null
+    );
 
     const {
         data: lessons,
@@ -75,6 +50,40 @@ export function TeacherDashboard() {
         currentPage,
         onFetch: fetchData,
     });
+
+    const columns = [
+        columnHelper.accessor("title", {
+            header: "Title",
+            cell: (info) => info.getValue(),
+        }),
+        columnHelper.accessor("schedule.days", {
+            header: "Days",
+            cell: (info) => info.getValue().join(", "),
+        }),
+        columnHelper.accessor("schedule.time", {
+            header: "Time",
+            cell: (info) => info.getValue(),
+        }),
+        columnHelper.accessor("schedule.room", {
+            header: "Room",
+            cell: (info) => info.getValue(),
+        }),
+        columnHelper.display({
+            id: "actions",
+            header: "",
+            cell: (info) => (
+                <button
+                    className={styles.editButton}
+                    onClick={() => {
+                        setSelectedLessonId(info.row.original.id);
+                        setIsEditEnrollmentModalOpen(true);
+                    }}
+                >
+                    Edit
+                </button>
+            ),
+        }),
+    ];
 
     if (loading) {
         return (
@@ -116,10 +125,7 @@ export function TeacherDashboard() {
                     </div>
                     <button
                         className={styles.addButton}
-                        onClick={() => {
-                            // TODO: Implement add new class functionality
-                            console.log("Add new class clicked");
-                        }}
+                        onClick={() => setIsCreateModalOpen(true)}
                     >
                         Add New Class
                     </button>
@@ -147,6 +153,21 @@ export function TeacherDashboard() {
                 infoClassName={styles.paginationInfo}
                 buttonsClassName={styles.paginationButtons}
                 buttonClassName={styles.paginationButton}
+            />
+
+            <CreateLessonModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                teacherId={teacherId ? parseInt(teacherId) : 0}
+            />
+
+            <EditEnrollmentModal
+                isOpen={isEditEnrollmentModalOpen}
+                onClose={() => {
+                    setIsEditEnrollmentModalOpen(false);
+                    setSelectedLessonId(null);
+                }}
+                lessonId={selectedLessonId || 0}
             />
         </div>
     );

@@ -33,7 +33,11 @@ export const api = {
         );
     },
 
-    async delete(endpoint: string): Promise<Result<void>> {
-        return tryCatch(axiosInstance.delete(endpoint).then(() => undefined));
+    async delete<D = unknown>(endpoint: string, data?: D): Promise<Result<void>> {
+        return tryCatch(
+            axiosInstance
+                .delete(endpoint, { data })
+                .then(() => undefined)
+        );
     },
 };

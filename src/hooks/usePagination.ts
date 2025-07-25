@@ -1,24 +1,5 @@
 import { useCallback } from "react";
-
-export interface PageInfo {
-    totalElements: number;
-    totalPages: number;
-    currentPage: number;
-    pageSize: number;
-    first: boolean;
-    last: boolean;
-}
-
-export interface UsePaginationProps {
-    pageInfo: PageInfo;
-    currentPage: number;
-    onFetch: (page: number) => void;
-}
-
-export interface UsePaginationReturn {
-    handlePreviousPage: () => void;
-    handleNextPage: () => void;
-}
+import type { UsePaginationProps, UsePaginationReturn } from "../types";
 
 export function usePagination({
     pageInfo,

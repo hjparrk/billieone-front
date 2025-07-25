@@ -1,31 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLRUCache } from "./useLRUCache";
-import type { Result, PageResponse } from "../types";
-
-export interface PageInfo {
-    totalElements: number;
-    totalPages: number;
-    currentPage: number;
-    pageSize: number;
-    first: boolean;
-    last: boolean;
-}
-
-export interface UseDataFetchingProps<T> {
-    fetchFn: (page: number) => Promise<Result<PageResponse<T>>>;
-    dependencies?: React.DependencyList;
-    initialPageSize?: number;
-    maxCacheSize?: number;
-}
-
-export interface UseDataFetchingReturn<T> {
-    data: T[];
-    loading: boolean;
-    error: string | null;
-    currentPage: number;
-    pageInfo: PageInfo;
-    fetchData: (page: number) => Promise<void>;
-}
+import type { Result, PageResponse, UseDataFetchingProps, UseDataFetchingReturn, DataFetchingPageInfo } from "../types";
 
 export function useDataFetching<T>({
     fetchFn,
@@ -37,7 +12,7 @@ export function useDataFetching<T>({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(0);
-    const [pageInfo, setPageInfo] = useState<PageInfo>({
+    const [pageInfo, setPageInfo] = useState<DataFetchingPageInfo>({
         totalElements: 0,
         totalPages: 0,
         currentPage: 0,

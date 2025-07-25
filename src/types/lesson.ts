@@ -20,3 +20,13 @@ export interface Lesson extends BaseEntity {
     teacher: Teacher;
     schedule: Schedule;
 }
+
+export interface CreateLessonRequest {
+    title: string;
+    schedule: {
+        days: string[];
+        time: string;
+        room: string;
+    };
+    teacherId: number;
+}
