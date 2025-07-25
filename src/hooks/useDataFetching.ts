@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLRUCache } from "./useLRUCache";
-import type { Result, PageResponse, UseDataFetchingProps, UseDataFetchingReturn, DataFetchingPageInfo } from "../types";
+import type {
+    PageResponse,
+    UseDataFetchingProps,
+    UseDataFetchingReturn,
+    DataFetchingPageInfo,
+} from "../types";
 
 export function useDataFetching<T>({
     fetchFn,
