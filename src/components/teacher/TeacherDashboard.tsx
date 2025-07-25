@@ -1,54 +1,52 @@
-import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { createColumnHelper } from "@tanstack/react-table";
 import { lessonService } from "../../services/lessonService";
 import { useDataFetching } from "../../hooks/useDataFetching";
 import { usePagination } from "../../hooks/usePagination";
 import { DataTable } from "../common/DataTable";
 import { Pagination } from "../common/Pagination";
-import type { Lesson } from "../../types";
-import styles from "../../styles/components/lesson/LessonList.module.css";
+import type { LessonSummary } from "../../types";
+import styles from "../../styles/components/teacher/TeacherDashboard.module.css";
 
-const columnHelper = createColumnHelper<Lesson>();
+const columnHelper = createColumnHelper<LessonSummary>();
 
 const columns = [
     columnHelper.accessor("title", {
         header: "Title",
         cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("teacher", {
-        header: "Teacher",
-        cell: (info) => {
-            const teacher = info.getValue();
-            return (
-                <Link
-                    to={`/teachers/${teacher.id}`}
-                    className={styles.teacherLink}
-                >
-                    {teacher.name}
-                </Link>
-            );
-        },
+    columnHelper.accessor("schedule.days", {
+        header: "Days",
+        cell: (info) => info.getValue().join(", "),
     }),
-    columnHelper.accessor("teacher.subject", {
-        header: "Subject",
+    columnHelper.accessor("schedule.time", {
+        header: "Time",
         cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("schedule", {
-        header: "Schedule",
-        cell: (info) => {
-            const schedule = info.getValue();
-            return (
-                <div className={styles.schedule}>
-                    <div>{schedule.days.join(", ")}</div>
-                    <div>{schedule.time}</div>
-                    <div>Room: {schedule.room}</div>
-                </div>
-            );
-        },
+    columnHelper.accessor("schedule.room", {
+        header: "Room",
+        cell: (info) => info.getValue(),
+    }),
+    columnHelper.display({
+        id: "actions",
+        header: "",
+        cell: () => (
+            <button
+                className={styles.editButton}
+                onClick={() => {
+                    // TODO: Implement edit functionality
+                    console.log("Edit lesson clicked");
+                }}
+            >
+                Edit
+            </button>
+        ),
     }),
 ];
 
-export function LessonList() {
+export function TeacherDashboard() {
+    const { teacherId } = useParams<{ teacherId: string }>();
+
     const {
         data: lessons,
         loading,
@@ -56,9 +54,20 @@ export function LessonList() {
         currentPage,
         pageInfo,
         fetchData,
-    } = useDataFetching<Lesson>({
-        fetchFn: async (page: number) =>
-            lessonService.getLessons({ page, size: 10 }),
+    } = useDataFetching<LessonSummary>({
+        fetchFn: async (page: number) => {
+            if (!teacherId) {
+                return {
+                    data: null,
+                    error: new Error("Teacher ID is required"),
+                };
+            }
+            return lessonService.getLessonsByTeacherId(parseInt(teacherId), {
+                page,
+                size: 10,
+            });
+        },
+        dependencies: [teacherId],
     });
 
     const { handlePreviousPage, handleNextPage } = usePagination({
@@ -72,7 +81,7 @@ export function LessonList() {
             <div className={styles.container}>
                 <div className={styles.loading}>
                     <div className={styles.spinner}></div>
-                    <p>Loading classes...</p>
+                    <p>Loading lessons...</p>
                 </div>
             </div>
         );
@@ -97,18 +106,31 @@ export function LessonList() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h2 className={styles.title}>Classes</h2>
-                <p className={styles.subtitle}>
-                    {pageInfo.totalElements} class
-                    {pageInfo.totalElements !== 1 ? "s" : ""} opened
-                </p>
+                <div className={styles.headerContent}>
+                    <div>
+                        <h2 className={styles.title}>Teacher Dashboard</h2>
+                        <p className={styles.subtitle}>
+                            {pageInfo.totalElements} class
+                            {pageInfo.totalElements !== 1 ? "es" : ""} assigned
+                        </p>
+                    </div>
+                    <button
+                        className={styles.addButton}
+                        onClick={() => {
+                            // TODO: Implement add new class functionality
+                            console.log("Add new class clicked");
+                        }}
+                    >
+                        Add New Class
+                    </button>
+                </div>
             </div>
 
             <DataTable
                 data={lessons}
                 columns={columns}
                 emptyMessage="No classes found"
-                emptyDescription="There are no classes available at the moment."
+                emptyDescription="This teacher has no classes assigned at the moment."
                 containerClassName={styles.tableContainer}
                 tableClassName={styles.table}
                 headerClassName={styles.th}

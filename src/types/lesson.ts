@@ -1,4 +1,5 @@
 import type { BaseEntity } from "./common";
+import type { Teacher } from "./teacher";
 
 // Schedule JSONB type
 export interface Schedule {
@@ -7,11 +8,10 @@ export interface Schedule {
     room: string;
 }
 
-// Teacher entity
-export interface Teacher {
-    id: number;
-    name: string;
-    subject: string;
+// LessonSummary for teacher dashboard (without teacher info)
+export interface LessonSummary extends BaseEntity {
+    title: string;
+    schedule: Schedule;
 }
 
 // Basic Lesson entity (updated to match backend structure)

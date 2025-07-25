@@ -17,8 +17,6 @@ export interface PageResponse<T> {
 // Base entity with common fields
 export interface BaseEntity {
     id: number;
-    createdAt: string;
-    updatedAt: string;
 }
 
 // API request parameter types

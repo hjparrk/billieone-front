@@ -1,75 +1,111 @@
 .header {
-  background-color: var(--white);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: var(--z-sticky);
+    background-color: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
 }
 
 .headerContent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.logo {
+    text-decoration: none;
+    color: inherit;
 }
 
 .logo h1 {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--primary-color);
-  margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+    margin: 0;
+    transition: color var(--transition-fast);
+}
+
+.logo:hover h1 {
+    color: var(--primary-hover);
+}
+
+.addClassButton {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: 1px solid var(--primary-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.addClassButton:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
 }
 
 .nav {
-  display: flex;
-  gap: var(--spacing-xl);
+    display: flex;
+    gap: var(--spacing-xl);
 }
 
 .navLink {
-  position: relative;
-  color: var(--text-muted);
-  text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+    position: relative;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
 }
 
 .navLink:hover {
-  color: var(--primary-color);
-  background-color: var(--bg-muted);
+    color: var(--primary-color);
+    background-color: var(--bg-muted);
 }
 
 .navLink.active {
-  color: var(--primary-color);
-  background-color: rgba(59, 130, 246, 0.1);
+    color: var(--primary-color);
+    background-color: rgba(59, 130, 246, 0.1);
 }
 
 .navLink.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 2px;
-  background-color: var(--primary-color);
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background-color: var(--primary-color);
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .headerContent {
-    flex-direction: column;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-  }
-  
-  .nav {
-    gap: var(--spacing-md);
-  }
-  
-  .logo h1 {
-    font-size: var(--font-size-lg);
-  }
+    .headerContent {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+
+    .nav {
+        gap: var(--spacing-md);
+    }
+
+    .logo h1 {
+        font-size: var(--font-size-lg);
+    }
+
+    .addClassButton {
+        width: 100%;
+        justify-content: center;
+    }
 }
